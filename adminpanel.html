@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>پنل مدیریت | شیما استور</title>
+<link rel="stylesheet" href="style.css">
+<script>try{var s=JSON.parse(sessionStorage.getItem('shima_admin_session')||'null');var ok=s&&s.exp>Date.now();if(!ok){if(sessionStorage.getItem('shima_admin_logged_in')!=='true')location.replace('./login.html')}}catch(e){location.replace('./login.html')}</script>
+<style>.github-box{border:2px solid #c9a86a!important;background:#fffdf6!important}.github-steps{margin:.6rem 1.1rem .4rem 0;font-size:.88rem;color:#4a443c}.github-steps li{margin:.25rem 0}.github-msg{font-size:.85rem;margin-top:.5rem;min-height:1.3rem}</style>
+</head>
+<body>
+<header class="header admin-header"><div class="container header-inner">
+<a href="./index.html" class="logo"><span class="logo-mark">SH</span><span class="logo-text"><b>پنل مدیریت شیما</b><small>ADMIN</small></span></a>
+<div class="header-actions admin-actions"><a href="./index.html" class="btn btn-ghost btn-sm">مشاهده فروشگاه</a><button class="btn btn-dark btn-sm" id="logoutBtn">خروج</button></div>
+</div></header>
+<div class="admin-wrap">
+<div class="admin-top"><h2>مدیریت محصولات</h2><small>بدون عکس هم سایت شیک نمایش می‌دهد</small></div>
+<div class="stat-grid"><div class="stat"><small>تعداد محصولات</small><b id="statTotal">۰</b></div><div class="stat"><small>موجودی کل</small><b id="statStock">۰</b></div><div class="stat"><small>ارزش موجودی</small><b id="statValue">۰</b></div><div class="stat"><small>میانگین قیمت</small><b id="statAvg">۰</b></div></div>
+<div class="panel"><h3 id="formTitle">افزودن محصول جدید</h3>
+<div class="form-grid"><input id="pName" placeholder="نام محصول"><select id="pCat"><option>ظروف</option><option>اکسسوری</option></select><input id="pPrice" type="number" inputmode="numeric" placeholder="قیمت (تومان)"><input id="pOff" type="number" inputmode="numeric" placeholder="تخفیف درصد"><input id="pStock" type="number" inputmode="numeric" placeholder="موجودی"><textarea id="pDesc" placeholder="توضیحات محصول"></textarea></div>
+<div class="up-box"><p><b>تصاویر محصول (حداکثر ۸ عکس)</b><br><small>برای گیت‌هاب بهتر است «لینک عکس» بگذاری تا فایل سبک بماند. اولین عکس کاور است.</small></p><div class="up-actions"><label class="btn btn-dark btn-sm" style="cursor:pointer">انتخاب از گوشی<input type="file" id="fileInput" accept="image/*" multiple hidden></label><input type="text" id="imgUrl" placeholder="لینک عکس"><button class="btn btn-gold btn-sm" id="addUrlBtn">افزودن لینک</button><button class="btn btn-ghost btn-sm" id="clearImgs">پاک کردن</button></div><div class="prev-grid" id="previewGrid"></div></div>
+<div class="form-cta"><button class="btn btn-gold" id="submitBtn">ثبت محصول</button><button class="btn btn-ghost" id="cancelEdit" style="display:none">انصراف</button></div>
+</div>
+<div class="panel"><h3>لیست محصولات</h3><div class="admin-list" id="productList"></div></div>
+<div class="panel github-box"><h3>انتشار دائمی در گیت‌هاب</h3>
+<p class="panel-sub">ثبت در پنل اول فقط در همین مرورگر ذخیره می‌شود. برای ماندگاری برای همه:</p>
+<ol class="github-steps">
+<li>محصول را ثبت کن</li>
+<li>دکمه «دانلود products.json» را بزن</li>
+<li>در گیت‌هاب فایل <b>products.json</b> را با همین فایل جایگزین کن و Commit بزن</li>
+</ol>
+<div class="form-cta">
+<button class="btn btn-gold" id="downloadJsonBtn">دانلود products.json</button>
+<button class="btn btn-ghost" id="loadSiteBtn">بارگذاری از سایت</button>
+<label class="btn btn-ghost" style="cursor:pointer">وارد کردن فایل<input type="file" id="importJson" accept="application/json" hidden></label>
+<button class="btn btn-dark" id="wipeAllBtn">پاک کردن همه</button>
+</div>
+<p id="githubMsg" class="github-msg"></p>
+</div>
+</div>
+<script src="admin.js"></script>
+</body>
+</html>

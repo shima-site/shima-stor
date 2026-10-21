@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ورود مدیر | شیما استور</title>
+<link rel="stylesheet" href="style.css">
+<script>try{var s=JSON.parse(sessionStorage.getItem('shima_admin_session')||'null');if(s&&s.exp>Date.now())location.replace('./adminpanel.html')}catch(e){}</script>
+</head>
+<body>
+<div class="login-wrap"><div class="login-card">
+<div class="logo" style="justify-content:center"><span class="logo-mark">SH</span></div>
+<h3 style="margin-top:.5rem">ورود به پنل مدیریت</h3>
+<p class="login-sub">رمز عبور فروشگاه را وارد کنید</p>
+<div class="pass-wrap"><input type="password" id="loginPass" placeholder="رمز عبور" autocomplete="current-password"><button type="button" id="showBtn">نمایش</button></div>
+<p id="capsMsg" class="caps-msg">کلید Caps Lock روشن است</p>
+<button class="btn btn-gold full center" id="loginBtn" style="width:100%">ورود</button>
+<p class="login-err" id="loginErr"></p>
+<p class="login-ok" id="loginOk"></p>
+<p class="login-hint">۵ تلاش اشتباه = قفل ۲ دقیقه‌ای • نشست ۶ ساعته</p>
+<a href="./index.html" class="back-link">بازگشت به فروشگاه</a>
+</div></div>
+<script>
+var DEF='Shima@1405',SALT='shima-v1';
+function fbHash(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (h2>>>0).toString(16)+(h1>>>0).toString(16)}
+function hashPw(s){try{if(window.crypto&&crypto.subtle&&window.isSecureContext){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}}catch(e){}return Promise.resolve('fb-'+fbHash(s))}
+function getLock(){try{return +(localStorage.getItem('shima_lock')||0)}catch(e){return 0}}
+function getAtt(){try{return +(localStorage.getItem('shima_att')||0)}catch(e){return 0}}
+function tick(){var l=getLock(),now=Date.now(),b=document.getElementById('loginBtn'),e=document.getElementById('loginErr');if(l>now){b.disabled=true;b.style.opacity='.6';var s=Math.ceil((l-now)/1000);e.textContent='قفل موقت: '+s+' ثانیه صبر کنید';setTimeout(tick,1000)}else{b.disabled=false;b.style.opacity='1';if(e.textContent.indexOf('قفل')===0)e.textContent=''}}
+setInterval(tick,1000);tick();
+document.getElementById('showBtn').onclick=function(){var i=document.getElementById('loginPass');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'نمایش':'مخفی'};
+document.getElementById('loginPass').addEventListener('keyup',function(e){var m=document.getElementById('capsMsg');if(m)m.style.display=(e.getModifierState&&e.getModifierState('CapsLock'))?'block':'none'});
+function fail(m){var a=getAtt()+1;try{localStorage.setItem('shima_att',a)}catch(e){}if(a>=5){try{localStorage.setItem('shima_lock',Date.now()+120000);localStorage.setItem('shima_att',0)}catch(e){}}document.getElementById('loginErr').textContent=m;tick()}
+document.getElementById('loginBtn').onclick=function(){
+var v=document.getElementById('loginPass').value||'';
+if(getLock()>Date.now()){tick();return}
+if(!v){document.getElementById('loginErr').textContent='رمز را وارد کنید';return}
+document.getElementById('loginErr').textContent='در حال بررسی...';
+var stored=null;try{stored=localStorage.getItem('shima_hash')}catch(e){}
+hashPw(DEF+SALT).then(function(defH){
+var expected=stored||defH;
+return hashPw(v+SALT).then(function(h){
+var ok=h.length===expected.length;for(var i=0;i<h.length;i++){if(h[i]!==expected[i])ok=false}
+if(ok){
+try{localStorage.setItem('shima_att','0');localStorage.removeItem('shima_lock')}catch(e){}
+var tok='';try{var a=new Uint8Array(16);crypto.getRandomValues(a);tok=Array.from(a).join('')}catch(e){tok='t'+Date.now()}
+try{sessionStorage.setItem('shima_admin_session',JSON.stringify({t:tok,exp:Date.now()+6*3600*1000}));sessionStorage.setItem('shima_admin_logged_in','true')}catch(e){}
+document.getElementById('loginOk').textContent='ورود موفق، در حال انتقال...';
+setTimeout(function(){location.replace('./adminpanel.html')},400);
+}else{setTimeout(function(){fail('رمز عبور اشتباه است')},500)}
+});
+});
+};
+document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginBtn').click()});
+</script>
+</body>
+</html>
