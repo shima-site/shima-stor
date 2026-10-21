@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><title>ورود مدیر | شیما استور</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="login-wrap"><div class="login-card"><div class="logo" style="justify-content:center"><span class="logo-mark">SH</span></div><h3 style="margin-top:.6rem">ورود به پنل مدیریت</h3><p style="color:#888;font-size:.85rem">رمز عبور فروشگاه را وارد کنید</p><input type="password" id="loginPass" placeholder="رمز عبور"><button class="btn btn-gold full center" id="loginBtn">ورود</button><p id="loginErr" style="color:#c0392b;font-size:.85rem;margin-top:.5rem;min-height:1.4rem"></p><a href="index.html" style="font-size:.85rem;color:#888">بازگشت به فروشگاه</a></div></div>
+<script>document.getElementById('loginBtn').onclick=function(){var v=document.getElementById('loginPass').value;if(v==='Shima@1405'){sessionStorage.setItem('shima_admin_logged_in','true');location.href='adminpanel.html'}else{document.getElementById('loginErr').textContent='رمز عبور اشتباه است'}};document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginBtn').click()});</script>
+</body>
+</html>
